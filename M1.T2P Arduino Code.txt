@@ -1,0 +1,54 @@
+int inches = 0;
+int Buttonpushed = 2;
+
+long readUltrasonicDistance(int triggerPin, int echoPin)
+{
+ pinMode(triggerPin, OUTPUT);
+ digitalWrite(triggerPin, LOW);
+ delayMicroseconds(10);
+ digitalWrite(triggerPin, HIGH);
+ delayMicroseconds(10);
+ digitalWrite(triggerPin, LOW);
+ pinMode(echoPin, INPUT);
+ return pulseIn(echoPin, HIGH); 
+}
+
+
+void setup()
+ {
+ Serial.begin(9600);
+ pinMode(Buttonpushed,INPUT);
+ attachInterrupt(digitalPinToInterrupt(3),Ultrasonicsensor,CHANGE);
+ }
+
+
+void Ultrasonicsensor()
+ {
+ int buttonState = digitalRead(Buttonpushed);
+ Serial.print('\n'); 
+ inches = readUltrasonicDistance(7, 7);
+ Serial.print("The object is in ");
+ Serial.print(inches);
+ Serial.println("away from the sensor");
+ 
+ if (inches < 50)
+ {
+ digitalWrite(13, HIGH);
+ Serial.print('\n'); 
+ Serial.print("Its too close to the object, alert light is on");
+ }
+  
+ else
+ {
+	digitalWrite(13, LOW);
+    Serial.print('\n'); 
+ 	Serial.print("Object undetected, light off");
+ }
+ delay(100);
+  
+}
+
+void loop()
+{
+
+}
